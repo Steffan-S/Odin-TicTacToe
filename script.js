@@ -33,13 +33,12 @@ const gameBoard = (function () {
 
 
 
-
 // Create a factory function for the players (player 1 = user, player 2 = computer)
 // When factory is created, create player1 and player2
 function createPlayer(name, symbol) {
     
     const getInputPlayer = function () {
-        const input = window.prompt("Your turn");
+        const input = window.prompt("Your turn " + name);
         return input;
     };
     
@@ -59,20 +58,28 @@ const playerComputer = createPlayer('Robotucus', 'O');
 // If not check if all 9 blocks are full = draw
 // If both not true continue game
 // Do this after every move from player 1 or 2
-const gameController = (function (gameboard, player1, player2) {
-    const gameEndCheck = function (gameBoard) {
-        let filledBlocks = 0;
+const gameController = (function () {
+    const gameEndCheck = function (currentBoard, gameBoard) {
+        let filledBlocks = 0; // 0 blocks = empty, 9 blocks = full grid
+        const currentGameBoard = currentBoard;
+        // console.log(currentGameBoard);
 
-        for (const block of gameBoard){
-            console.log(block);
-            if (block.length !== 0) {
+        for (let i = 0; i < currentBoard.length; i++){
+            // console.log(gameBoard[i] + ' succes');
+            if (currentBoard[i] !== null) {
                 filledBlocks++;
             };
         };
 
-        if (filledBlocks === 2){
-            console.log('DRAW, END GAME');
-        };
+        // console.log(filledBlocks + ' Filled blocks');
+
+        if (filledBlocks === 9){
+            console.log('END GAME');
+        } else if (filledBlocks % 2 == 0){ // even
+            gameBoard.updateGameBoard(playerUser.symbol, playerUser.getInputPlayer());
+        } else {
+            gameBoard.updateGameBoard(playerComputer.symbol, playerComputer.getInputPlayer());
+        }
     };
 
     return {gameEndCheck};
@@ -98,9 +105,9 @@ gameBoard.blancGameBoard();
 
 gameBoard.updateGameBoard(playerUser.symbol, playerUser.getInputPlayer());
 gameBoard.updateGameBoard(playerComputer.symbol, playerComputer.getInputPlayer());
-console.log(gameBoard.getBoard());
+// console.log('The game board = ' + gameBoard.getBoard());
 
-gameController.gameEndCheck(gameBoard.board);
+gameController.gameEndCheck(gameBoard.getBoard(), gameBoard);
 
 
 
