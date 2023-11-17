@@ -46,7 +46,14 @@ const playerComputer = createPlayer('Robotucus', 'O');
 // If both not true continue game
 // Do this after every move from player 1 or 2
 const gameController = (function () { // gamecontroller module
+    
     let filledBlocks = 0; // 0 blocks = empty, 9 blocks = full grid
+    let result = '';
+
+    const gameEndReset = () => {
+        filledBlocks = 0;
+        result = '';
+    } 
 
     const gameEndCheck = function (currentBoard) { // Loops through board array to see how many items are filled. 
         
@@ -62,6 +69,7 @@ const gameController = (function () { // gamecontroller module
             // checking rows for winner
             if (currentBoard[i * 3] !== null && currentBoard[i * 3] === currentBoard[(i * 3) + 1] && currentBoard[i * 3] === currentBoard[(i * 3) + 2]){
                 console.log('We have a winner: ' + currentBoard[i*3]);
+                result = currentBoard[i*3];
                 displayController.endGameModal();
                 // return currentBoard[i*3];
             };
@@ -69,6 +77,7 @@ const gameController = (function () { // gamecontroller module
             // checking columns for winner
             if (currentBoard[i] !== null && currentBoard[i] === currentBoard[i + 3] && currentBoard[i] === currentBoard[i + 6]){
                 console.log('We have a winner: ' + currentBoard[i]);
+                result = currentBoard[i];
                 displayController.endGameModal();
                 // return currentBoard[i];
             }
@@ -77,6 +86,7 @@ const gameController = (function () { // gamecontroller module
         // checking for diagonal winner
         if (currentBoard[0] !== null && currentBoard[0] === currentBoard[4] && currentBoard[0] === currentBoard[8]){
             console.log('We have a winner: ' + currentBoard[0]);
+            result = currentBoard[0];
             displayController.endGameModal();
             // return currentBoard[0];
         }
@@ -84,11 +94,13 @@ const gameController = (function () { // gamecontroller module
         // checking for diagonal winner
         if (currentBoard[2] !== null && currentBoard[2] === currentBoard[4] && currentBoard[2] === currentBoard[6]){
             console.log('We have a winner: ' + currentBoard[2]);
+            result = currentBoard[2];
             displayController.endGameModal();
             // return currentBoard[2];
         }
 
-        if (filledBlocks === 9) {
+        if (filledBlocks === 9 && result === '') {
+            result = 'draw';
             displayController.endGameModal();
             // console.log('END GAME');
         }
@@ -110,7 +122,11 @@ const gameController = (function () { // gamecontroller module
         return filledBlocks;
     }
 
-    return {filledBlocks, gameEndCheck, gameTurn, getGameTurnSymbol};
+    const getResult = () => {
+        return result;
+    }
+
+    return {filledBlocks, gameEndCheck, gameTurn, getGameTurnSymbol, getResult, gameEndReset};
 })();
 
 
@@ -155,10 +171,6 @@ const displayController = ( () => {
                     const input = i;
                     gameController.gameTurn(input);
                 });
-                // div.addEventListener('click', () => {
-                //     gameController.gameTurn();
-                //     div.textContent = gameboard[i];
-                // });
             }
             container.appendChild(div);
         }
@@ -167,16 +179,27 @@ const displayController = ( () => {
     const endGameModal = () => {
         const resultModal = document.querySelector('dialog');
 
+        if (gameController.getResult() === 'X'){
+            resultModal.classList.add('win');
+        } else if (gameController.getResult() === 'O'){
+            resultModal.classList.add('lose');
+        } else {
+                resultModal.classList.add('draw');
+            }
+
+
         resultModal.showModal();
 
         const resultModalNewGameButton = document.querySelector('#newGame')
 
         resultModalNewGameButton.addEventListener('click', () => {
             gameBoard.blancGameBoard();
+            gameController.gameEndReset();
             displayController.displayGridGameboard(gameBoard.getBoard());
             resultModal.close();
         })
     }
+    
 
     return { displayGridGameboard, deleteGridGameboard, endGameModal };
 })();
