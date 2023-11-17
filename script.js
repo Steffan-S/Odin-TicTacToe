@@ -1,16 +1,15 @@
 // Create a factory for the gameboard
 // Wrap the factory inside an IIFE to create a modolue pattern (don't want multiple copies)
 
-
-const gameBoard = (function () {
+document.addEventListener('DOMContentLoaded', function() {
+const gameBoard = (function () { // Gameboard module
     // Create an array to use as playboard
     // Playboard has 9 blocks
     // Playboard starts empty
-    // Player 1 and Player 2 can fill 1 empty block in turns
     // Add array to gameboard object
     let board = [];
     
-    // Creates a black gameboard (erase)
+    // Creates a blanc gameboard (erase)
     const blancGameBoard = () => {
         board = Array(9).fill(null);
     };
@@ -25,20 +24,23 @@ const gameBoard = (function () {
         return board;
     }
 
-    return { board, blancGameBoard, updateGameBoard, getBoard };
+    return { blancGameBoard, updateGameBoard, getBoard };
 })();
-
-
-
 
 
 
 // Create a factory function for the players (player 1 = user, player 2 = computer)
 // When factory is created, create player1 and player2
-function createPlayer(name, symbol) {
+function createPlayer(name, symbol) { // player factory
     
-    const getInputPlayer = function () {
-        const input = window.prompt("Your turn " + name);
+    const getInputPlayer = function (gameboard) {
+        let input = window.prompt("Hey " + name + ", Enter a number between 0 and 9");
+
+        while (input > 9 || input < 0 || gameboard[input] !== null){
+            console.log(gameboard[input]);
+            input = window.prompt("Try again " + name + ", Enter a number between 0 and 9");
+        }
+
         return input;
     };
     
@@ -46,11 +48,8 @@ function createPlayer(name, symbol) {
 }
 
 const playerUser = createPlayer('Steffan', 'X');
-// console.log(playerUser);
-// console.log(playerUser.getInputPlayer());
 
 const playerComputer = createPlayer('Robotucus', 'O');
-// console.log(playerComputer);
 
 
 // create and add functionality to gamecontroller object to check gamestatus
@@ -58,31 +57,35 @@ const playerComputer = createPlayer('Robotucus', 'O');
 // If not check if all 9 blocks are full = draw
 // If both not true continue game
 // Do this after every move from player 1 or 2
-const gameController = (function () {
-    const gameEndCheck = function (currentBoard, gameBoard) {
-        let filledBlocks = 0; // 0 blocks = empty, 9 blocks = full grid
-        const currentGameBoard = currentBoard;
-        // console.log(currentGameBoard);
+const gameController = (function () { // gamecontroller module
+    let filledBlocks = 0; // 0 blocks = empty, 9 blocks = full grid
+
+    const gameEndCheck = function (currentBoard) { // Loops through board array to see how many items are filled. 
+        filledBlocks = 0;
 
         for (let i = 0; i < currentBoard.length; i++){
-            // console.log(gameBoard[i] + ' succes');
             if (currentBoard[i] !== null) {
-                filledBlocks++;
+                filledBlocks = filledBlocks + 1;
             };
         };
 
-        // console.log(filledBlocks + ' Filled blocks');
-
-        if (filledBlocks === 9){
+        if (filledBlocks === 9) {
             console.log('END GAME');
-        } else if (filledBlocks % 2 == 0){ // even
-            gameBoard.updateGameBoard(playerUser.symbol, playerUser.getInputPlayer());
-        } else {
-            gameBoard.updateGameBoard(playerComputer.symbol, playerComputer.getInputPlayer());
         }
     };
 
-    return {gameEndCheck};
+    const gameTurn = function (){
+        console.log(filledBlocks);
+        if (filledBlocks % 2 == 0) { // even
+            gameBoard.updateGameBoard(playerUser.symbol, playerUser.getInputPlayer(gameBoard.getBoard()));
+            gameController.gameEndCheck(gameBoard.getBoard());
+        } else {
+            gameBoard.updateGameBoard(playerComputer.symbol, playerComputer.getInputPlayer(gameBoard.getBoard()));
+            gameController.gameEndCheck(gameBoard.getBoard());
+        }
+    }
+
+    return {filledBlocks, gameEndCheck, gameTurn};
 })();
 
 
@@ -100,15 +103,18 @@ const gameController = (function () {
 
 // tests
 
-
+// Creates blanc gameboard
 gameBoard.blancGameBoard();
 
-gameBoard.updateGameBoard(playerUser.symbol, playerUser.getInputPlayer());
-gameBoard.updateGameBoard(playerComputer.symbol, playerComputer.getInputPlayer());
-// console.log('The game board = ' + gameBoard.getBoard());
+// for (let i = 0; i < 9; i++){
+//     gameController.gameTurn(); 
+// }
 
-gameController.gameEndCheck(gameBoard.getBoard(), gameBoard);
+// console.table(playerUser);
+// console.table(playerComputer);
+// console.table(gameBoard);
+// console.table(gameController);
 
 
 
-// console.log(board);
+});

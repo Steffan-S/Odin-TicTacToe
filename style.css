@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    display: grid;
+    place-content: center;
+    height: 100vh;
+}
+
+h1 {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.container {
+    border: solid 1px #0000001c;
+    width: 360px;
+    height: 360px;
+}
