@@ -61,13 +61,41 @@ const gameController = (function () { // gamecontroller module
     let filledBlocks = 0; // 0 blocks = empty, 9 blocks = full grid
 
     const gameEndCheck = function (currentBoard) { // Loops through board array to see how many items are filled. 
+        console.log(currentBoard);
+        
         filledBlocks = 0;
 
-        for (let i = 0; i < currentBoard.length; i++){
+        for (let i = 0; i < currentBoard.length; i++){ // checks whose turn it is
             if (currentBoard[i] !== null) {
                 filledBlocks = filledBlocks + 1;
             };
         };
+
+        for (let i = 0; i < 3; i++){ 
+            // checking rows for winner
+            if (currentBoard[i * 3] !== null && currentBoard[i * 3] === currentBoard[(i * 3) + 1] && currentBoard[i * 3] === currentBoard[(i * 3) + 2]){
+                console.log('We have a winner: ' + currentBoard[i*3]);
+                return currentBoard[i*3];
+            };
+
+            // checking columns for winner
+            if (currentBoard[i] !== null && currentBoard[i] === currentBoard[i + 3] && currentBoard[i] === currentBoard[i + 6]){
+                console.log('We have a winner: ' + currentBoard[i]);
+                return currentBoard[i];
+            }
+        };
+
+        // checking for diagonal winner
+        if (currentBoard[0] !== null && currentBoard[0] === currentBoard[4] && currentBoard[0] === currentBoard[8]){
+            console.log('We have a winner: ' + currentBoard[0]);
+            return currentBoard[0];
+        }
+
+        // checking for diagonal winner
+        if (currentBoard[2] !== null && currentBoard[2] === currentBoard[4] && currentBoard[2] === currentBoard[6]){
+            console.log('We have a winner: ' + currentBoard[2]);
+            return currentBoard[2];
+        }
 
         if (filledBlocks === 9) {
             console.log('END GAME');
@@ -103,12 +131,17 @@ const gameController = (function () { // gamecontroller module
 
 // tests
 
+
+
 // Creates blanc gameboard
 gameBoard.blancGameBoard();
 
-// for (let i = 0; i < 9; i++){
-//     gameController.gameTurn(); 
-// }
+// const testGameBoard = ["X", "O", null, "X", "O", null, "X", null, "O"];
+// gameController.gameEndCheck(testGameBoard);
+
+for (let i = 0; i < 9; i++){
+    gameController.gameTurn(); 
+}
 
 // console.table(playerUser);
 // console.table(playerComputer);
