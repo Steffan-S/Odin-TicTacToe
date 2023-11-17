@@ -61,7 +61,6 @@ const gameController = (function () { // gamecontroller module
     let filledBlocks = 0; // 0 blocks = empty, 9 blocks = full grid
 
     const gameEndCheck = function (currentBoard) { // Loops through board array to see how many items are filled. 
-        console.log(currentBoard);
         
         filledBlocks = 0;
 
@@ -113,7 +112,11 @@ const gameController = (function () { // gamecontroller module
         }
     }
 
-    return {filledBlocks, gameEndCheck, gameTurn};
+    const getGameTurnSymbol = function (){
+        return filledBlocks;
+    }
+
+    return {filledBlocks, gameEndCheck, gameTurn, getGameTurnSymbol};
 })();
 
 
@@ -130,6 +133,25 @@ const displayController = ( () => {
         for (let i = 0; i < gameBoard.getBoard().length; i++){
             const div = document.createElement('div');
             div.classList.add('gameboardblock', i);
+
+            div.addEventListener('mouseover', () => {
+                console.log(gameController.getGameTurnSymbol())
+                if (gameController.getGameTurnSymbol() % 2 == 0) { // even
+                    div.textContent = 'X';
+                } else {
+                    div.textContent = 'O';
+                }
+            });
+
+            
+            div.addEventListener('mouseout', () => {
+                div.textContent = ''
+            })
+
+            div.addEventListener('click', () => {
+                
+            })
+
             container.appendChild(div);
         }
     }
@@ -160,9 +182,9 @@ displayController.nextTurnButton();
 // const testGameBoard = ["X", "O", null, "X", "O", null, "X", null, "O"];
 // gameController.gameEndCheck(testGameBoard);
 
-for (let i = 0; i < 2; i++){
-    gameController.gameTurn(); 
-}
+// for (let i = 0; i < 2; i++){
+//     gameController.gameTurn(); 
+// }
 
 // console.table(playerUser);
 // console.table(playerComputer);

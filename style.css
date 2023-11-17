@@ -27,9 +27,13 @@ h1 {
 }
 
 .gameboardblock {
-    /* width: 120px;
-    height: 120px; */
     border: solid 1px #00000061;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-size: 42px;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 
