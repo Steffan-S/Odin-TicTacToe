@@ -32,19 +32,7 @@ const gameBoard = (function () { // Gameboard module
 // Create a factory function for the players (player 1 = user, player 2 = computer)
 // When factory is created, create player1 and player2
 function createPlayer(name, symbol) { // player factory
-    
-    const getInputPlayer = function (gameboard) {
-        let input = window.prompt("Hey " + name + ", Enter a number between 0 and 9");
-
-        while (input > 9 || input < 0 || gameboard[input] !== null){
-            console.log(gameboard[input]);
-            input = window.prompt("Try again " + name + ", Enter a number between 0 and 9");
-        }
-
-        return input;
-    };
-    
-    return { name, symbol, getInputPlayer };
+    return { name, symbol };
 }
 
 const playerUser = createPlayer('Steffan', 'X');
@@ -101,13 +89,13 @@ const gameController = (function () { // gamecontroller module
         }
     };
 
-    const gameTurn = function (){
+    const gameTurn = function (input){
         console.log(filledBlocks);
         if (filledBlocks % 2 == 0) { // even
-            gameBoard.updateGameBoard(playerUser.symbol, playerUser.getInputPlayer(gameBoard.getBoard()));
+            gameBoard.updateGameBoard(playerUser.symbol, input);
             gameController.gameEndCheck(gameBoard.getBoard());
         } else {
-            gameBoard.updateGameBoard(playerComputer.symbol, playerComputer.getInputPlayer(gameBoard.getBoard()));
+            gameBoard.updateGameBoard(playerComputer.symbol, input);
         }
         gameController.gameEndCheck(gameBoard.getBoard());
         displayController.displayGridGameboard(gameBoard.getBoard());
@@ -160,11 +148,14 @@ const displayController = ( () => {
                 })
 
                 div.addEventListener('click', () => {
-                    gameController.gameTurn();
-                    div.textContent = gameboard[i];
+                    const input = i;
+                    gameController.gameTurn(input);
                 });
+                // div.addEventListener('click', () => {
+                //     gameController.gameTurn();
+                //     div.textContent = gameboard[i];
+                // });
             }
-
             container.appendChild(div);
         }
     }
