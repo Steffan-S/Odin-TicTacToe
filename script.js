@@ -108,8 +108,9 @@ const gameController = (function () { // gamecontroller module
             gameController.gameEndCheck(gameBoard.getBoard());
         } else {
             gameBoard.updateGameBoard(playerComputer.symbol, playerComputer.getInputPlayer(gameBoard.getBoard()));
-            gameController.gameEndCheck(gameBoard.getBoard());
         }
+        gameController.gameEndCheck(gameBoard.getBoard());
+        displayController.displayGridGameboard(gameBoard.getBoard());
     }
 
     const getGameTurnSymbol = function (){
@@ -127,30 +128,42 @@ const gameController = (function () { // gamecontroller module
 // Create a factory for the displayController
 // Wrap the factory inside an IIFE to create a modolue pattern (don't want multiple copies)
 const displayController = ( () => {
-    const displayGridGameboard = () => {
-        const container = document.querySelector('.container');
+    const container = document.querySelector('.container');
+    
+    const deleteGridGameboard = () => {
+        while (container.firstChild){
+            container.removeChild(container.firstChild);
+        }
+    }
 
-        for (let i = 0; i < gameBoard.getBoard().length; i++){
+    const displayGridGameboard = (gameboard) => {
+        deleteGridGameboard(); // deletes all appended container to main container before adding 9 new containers
+
+        for (let i = 0; i < gameBoard.getBoard().length; i++) {
             const div = document.createElement('div');
             div.classList.add('gameboardblock', i);
+            console.log(gameboard[i]);
+            div.textContent = gameboard[i];
 
-            div.addEventListener('mouseover', () => {
-                console.log(gameController.getGameTurnSymbol())
-                if (gameController.getGameTurnSymbol() % 2 == 0) { // even
-                    div.textContent = 'X';
-                } else {
-                    div.textContent = 'O';
-                }
-            });
+            if (gameboard[i] === null) { // checks if grid block is empty or not
+                div.addEventListener('mouseover', () => {
+                    if (gameController.getGameTurnSymbol() % 2 == 0 && gameBoard.getBoard[i] !== null) { // even
+                        div.textContent = 'X';
+                    } else if (gameBoard.getBoard[i] !== null) {
+                        div.textContent = 'O';
+                    }
+                });
 
-            
-            div.addEventListener('mouseout', () => {
-                div.textContent = ''
-            })
 
-            div.addEventListener('click', () => {
-                
-            })
+                div.addEventListener('mouseout', () => {
+                    div.textContent = ''
+                })
+
+                div.addEventListener('click', () => {
+                    gameController.gameTurn();
+                    div.textContent = gameboard[i];
+                });
+            }
 
             container.appendChild(div);
         }
@@ -177,7 +190,7 @@ const displayController = ( () => {
 
 // Creates blanc gameboard
 gameBoard.blancGameBoard();
-displayController.displayGridGameboard();
+displayController.displayGridGameboard(gameBoard.getBoard());
 displayController.nextTurnButton();
 // const testGameBoard = ["X", "O", null, "X", "O", null, "X", null, "O"];
 // gameController.gameEndCheck(testGameBoard);
