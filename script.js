@@ -62,30 +62,35 @@ const gameController = (function () { // gamecontroller module
             // checking rows for winner
             if (currentBoard[i * 3] !== null && currentBoard[i * 3] === currentBoard[(i * 3) + 1] && currentBoard[i * 3] === currentBoard[(i * 3) + 2]){
                 console.log('We have a winner: ' + currentBoard[i*3]);
-                return currentBoard[i*3];
+                displayController.endGameModal();
+                // return currentBoard[i*3];
             };
 
             // checking columns for winner
             if (currentBoard[i] !== null && currentBoard[i] === currentBoard[i + 3] && currentBoard[i] === currentBoard[i + 6]){
                 console.log('We have a winner: ' + currentBoard[i]);
-                return currentBoard[i];
+                displayController.endGameModal();
+                // return currentBoard[i];
             }
         };
 
         // checking for diagonal winner
         if (currentBoard[0] !== null && currentBoard[0] === currentBoard[4] && currentBoard[0] === currentBoard[8]){
             console.log('We have a winner: ' + currentBoard[0]);
-            return currentBoard[0];
+            displayController.endGameModal();
+            // return currentBoard[0];
         }
 
         // checking for diagonal winner
         if (currentBoard[2] !== null && currentBoard[2] === currentBoard[4] && currentBoard[2] === currentBoard[6]){
             console.log('We have a winner: ' + currentBoard[2]);
-            return currentBoard[2];
+            displayController.endGameModal();
+            // return currentBoard[2];
         }
 
         if (filledBlocks === 9) {
-            console.log('END GAME');
+            displayController.endGameModal();
+            // console.log('END GAME');
         }
     };
 
@@ -130,7 +135,6 @@ const displayController = ( () => {
         for (let i = 0; i < gameBoard.getBoard().length; i++) {
             const div = document.createElement('div');
             div.classList.add('gameboardblock', i);
-            console.log(gameboard[i]);
             div.textContent = gameboard[i];
 
             if (gameboard[i] === null) { // checks if grid block is empty or not
@@ -160,15 +164,21 @@ const displayController = ( () => {
         }
     }
 
-    const nextTurnButton = () => {
-        const button = document.querySelector('.playButton');
+    const endGameModal = () => {
+        const resultModal = document.querySelector('dialog');
 
-        button.addEventListener('click', () => {
-            gameController.gameTurn();
+        resultModal.showModal();
+
+        const resultModalNewGameButton = document.querySelector('#newGame')
+
+        resultModalNewGameButton.addEventListener('click', () => {
+            gameBoard.blancGameBoard();
+            displayController.displayGridGameboard(gameBoard.getBoard());
+            resultModal.close();
         })
     }
 
-    return { displayGridGameboard, nextTurnButton };
+    return { displayGridGameboard, deleteGridGameboard, endGameModal };
 })();
 
 
@@ -182,7 +192,6 @@ const displayController = ( () => {
 // Creates blanc gameboard
 gameBoard.blancGameBoard();
 displayController.displayGridGameboard(gameBoard.getBoard());
-displayController.nextTurnButton();
 // const testGameBoard = ["X", "O", null, "X", "O", null, "X", null, "O"];
 // gameController.gameEndCheck(testGameBoard);
 

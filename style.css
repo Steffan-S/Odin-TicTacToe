@@ -1,6 +1,4 @@
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
 }
@@ -9,6 +7,9 @@ body {
     display: grid;
     place-content: center;
     height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
@@ -77,4 +78,12 @@ h1 {
 .playButton:active {
     box-shadow: none;
     transform: translateY(0);
+}
+
+
+/* dialog */
+dialog {
+    width: 50vw;
+    height: 50vh;
+    
 }
