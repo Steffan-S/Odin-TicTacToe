@@ -123,7 +123,19 @@ const gameController = (function () { // gamecontroller module
 
 // Create a factory for the displayController
 // Wrap the factory inside an IIFE to create a modolue pattern (don't want multiple copies)
+const displayController = ( () => {
+    const displayGridGameboard = () => {
+        const container = document.querySelector('.container');
 
+        for (let i = 0; i < gameBoard.getBoard().length; i++){
+            const div = document.createElement('div');
+            div.classList.add('gameboardblock', i);
+            container.appendChild(div);
+        }
+    }
+
+    return { displayGridGameboard };
+})();
 
 
 
@@ -135,11 +147,11 @@ const gameController = (function () { // gamecontroller module
 
 // Creates blanc gameboard
 gameBoard.blancGameBoard();
-
+displayController.displayGridGameboard();
 // const testGameBoard = ["X", "O", null, "X", "O", null, "X", null, "O"];
 // gameController.gameEndCheck(testGameBoard);
 
-for (let i = 0; i < 9; i++){
+for (let i = 0; i < 2; i++){
     gameController.gameTurn(); 
 }
 
