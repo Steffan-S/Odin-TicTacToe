@@ -134,7 +134,15 @@ const displayController = ( () => {
         }
     }
 
-    return { displayGridGameboard };
+    const nextTurnButton = () => {
+        const button = document.querySelector('.playButton');
+
+        button.addEventListener('click', () => {
+            gameController.gameTurn();
+        })
+    }
+
+    return { displayGridGameboard, nextTurnButton };
 })();
 
 
@@ -148,6 +156,7 @@ const displayController = ( () => {
 // Creates blanc gameboard
 gameBoard.blancGameBoard();
 displayController.displayGridGameboard();
+displayController.nextTurnButton();
 // const testGameBoard = ["X", "O", null, "X", "O", null, "X", null, "O"];
 // gameController.gameEndCheck(testGameBoard);
 
