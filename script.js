@@ -116,15 +116,15 @@ const gameController = (function () { // gamecontroller module
         }
         gameController.gameEndCheck(gameBoard.getBoard());
         displayController.displayGridGameboard(gameBoard.getBoard());
-    }
+    };
 
-    const getGameTurnSymbol = function (){
+    const getGameTurnSymbol = () => {
         return filledBlocks;
-    }
+    };
 
     const getResult = () => {
         return result;
-    }
+    };
 
     return {filledBlocks, gameEndCheck, gameTurn, getGameTurnSymbol, getResult, gameEndReset};
 })();
@@ -178,16 +178,23 @@ const displayController = ( () => {
 
     const endGameModal = () => {
         const resultModal = document.querySelector('dialog');
+        const h2 = document.getElementById('resultH2');
 
-        if (gameController.getResult() === 'X'){
-            resultModal.classList.add('win');
-        } else if (gameController.getResult() === 'O'){
-            resultModal.classList.add('lose');
+        if (gameController.getResult() === 'X') {
+            resultModal.className = 'win';
+            h2.className = 'h2win';
+            h2.textContent = 'You Win!';
+        } else if (gameController.getResult() === 'O') {
+            resultModal.className = 'lose';
+            h2.className = 'h2lose';
+            h2.textContent = 'You lose!';
         } else {
-                resultModal.classList.add('draw');
-            }
+            resultModal.className = 'draw';
+            h2.className = 'h2draw';
+            h2.textContent = 'You draw!';
+        }
 
-
+        resultModal.appendChild(h2);
         resultModal.showModal();
 
         const resultModalNewGameButton = document.querySelector('#newGame')
