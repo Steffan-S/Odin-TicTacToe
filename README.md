@@ -13,13 +13,16 @@ We’re making a Tic Tac Toe game you can play in your browser!
 - Write the functions that allow players to add marks to a specific spot on the board by interacting with the appropriate DOM elements (e.g. letting players click on a board square to place their marker).
 - Clean up the interface to allow players to put in their names, include a button to start/restart the game and add a display element that shows the results upon game end!
 
-[🔗 Live Preview]()
+[🔗 Live Preview](https://steffan-s.github.io/Odin-TicTacToe/)
 
 ## Overview
 
 ### Features:
 
-
+- Able to play tic tac toe
+- Able to set your name
+- Able to reset game
+- Score display
 
 ### Tools Used:
 
@@ -28,6 +31,8 @@ We’re making a Tic Tac Toe game you can play in your browser!
 - Git and GitHub: Version control and collaborative development.
 
 ### Screenshots:
+
+<img width="787" alt="Screenshot 2023-11-21 at 16 47 47" src="https://github.com/Steffan-S/Odin-TicTacToe/assets/142731728/9883f063-12d1-4fc3-bbae-194e6d5e6b09">
 
 
 ### Contribution
